@@ -1,0 +1,22 @@
+retriever_task:
+  description: >
+    For the stock ticker '{ticker}', use your tool to find all relevant news articles from the last 7 days.
+  expected_output: >
+    A single text block containing all the retrieved news articles, concatenated together.
+  agent: stock_news_retriever
+
+analyst_task:
+  description: >
+    Take the provided news article text. Analyze it to produce a final JSON report.
+        Your JSON output must strictly adhere to the following schema, it cannot include any markers that signify the start or end of the JSON object like ```json or ```.:
+        {
+          "ticker": "string",
+          "sentiment": "string (either 'Positive', 'Negative', or 'Neutral')",
+          "summary": "string (a concise, one-sentence summary)"
+        }
+  expected_output: >
+    A single, valid JSON object containing the analysis. No ```json tags, pure valid JSON.
+  context:
+    - retriever_task
+  agent: stock_news_analyst
+  output_file: output/result.md
