@@ -8,7 +8,7 @@ from src.financial_analysis.tools.S3_ticker_news_search_tool import SearchS3ForN
 
 @CrewBase
 class ResearchCrew():
-    """Research crew for comprehensive topic analysis and reporting"""
+    """Research crew for comprehensive financial analysis and reporting"""
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -16,7 +16,7 @@ class ResearchCrew():
     @agent
     def stock_news_retriever(self) -> Agent:
         return Agent(
-            config=self.agents_config['stock_news_retriever'], # type: ignore[index]
+            config=self.agents_config['stock_news_retriever'],
             verbose=True,
             tools=[SearchS3ForNewsBasedOnTicker()]
         )
@@ -24,26 +24,24 @@ class ResearchCrew():
     @agent
     def stock_news_analyst(self) -> Agent:
         return Agent(
-            config=self.agents_config['stock_news_analyst'], # type: ignore[index]
+            config=self.agents_config['stock_news_analyst'],
             verbose=True
         )
 
     @task
     def retriever_task(self) -> Task:
         return Task(
-            config=self.tasks_config['retriever_task'] # type: ignore[index]
+            config=self.tasks_config['retriever_task']
         )
 
     @task
     def analyst_task(self) -> Task:
         return Task(
-            config=self.tasks_config['analyst_task'], # type: ignore[index]
-            output_file='output/report.md'
+            config=self.tasks_config['analyst_task'],
         )
 
     @crew
     def crew(self) -> Crew:
-        """Creates the research crew"""
         return Crew(
             agents=self.agents,
             tasks=self.tasks,
