@@ -43,8 +43,8 @@ jobs:
         id: build-image
         uses: docker/build-push-action@v6
         with:
-          context: ./ai_service
-          file: ./ai_service/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: |
             ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.ref_name }}-${{ github.sha }}
