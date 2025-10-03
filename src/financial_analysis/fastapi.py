@@ -23,6 +23,7 @@ async def analyze(ticker: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @app.get("/")
 def read_root():
     return {"message": "Server is running"}
