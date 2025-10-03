@@ -23,7 +23,7 @@ env:
   ECS_SERVICE: ai-insights-service        # The name of your ECS service
   ECS_TASK_DEFINITION_NAME: ai-insights-service-task
   ECS_CLUSTER: ai-insights-cluster        # The name of your ECS cluster
-  ECS_TASK_DEFINITION: ai-insights-service-task.json # A file to store the new task definition
+  ECS_TASK_DEFINITION_FILE: ai-insights-service-task.json # A file to store the new task definition
   CONTAINER_NAME: ai-service              # The name of the container in your ECS task definition
 
 # --- Workflow Jobs ---
