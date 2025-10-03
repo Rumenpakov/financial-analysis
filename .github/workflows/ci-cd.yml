@@ -59,14 +59,15 @@ jobs:
           cache-to: type=registry,ref=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:cache,mode=max
 
 
-      # --- Step 5: Download Latest Task Definition ---
       - name: Get latest task definition
         id: task-def
         run: |
           aws ecs describe-task-definition \
             --task-definition $ECS_TASK_DEFINITION_FAMILY \
-            --query taskDefinition > task-definition.json
+            --query taskDefinition \
+            --output json > task-definition.json
           echo "task-def=task-definition.json" >> $GITHUB_OUTPUT
+
 
       # --- Step 6: Determine image URI ---
       - name: Set image URI
