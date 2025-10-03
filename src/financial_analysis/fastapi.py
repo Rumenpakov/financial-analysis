@@ -12,7 +12,7 @@ app = FastAPI()
 @app.get("/analyze/{ticker}")
 async def analyze(ticker: str):
     try:
-        raw = run(ticker)
+        raw: str = run(ticker).removeprefix("```json").removesuffix("```")
         try:
             data = json.loads(raw)
         except json.JSONDecodeError:

@@ -9,7 +9,7 @@ on:
       - main
     # Only run if code inside the ai_service/ folder changes, to avoid unnecessary runs
     paths:
-      - 'ai_service/**'
+      - 'src/**'
       
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
