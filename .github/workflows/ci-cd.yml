@@ -60,20 +60,21 @@ jobs:
             --query taskDefinition > task-definition.json
           echo "task-def=task-definition.json" >> $GITHUB_OUTPUT
 
-      # --- Step 6: Render New Task Definition ---
+      # --- Step 6: Determine image URI ---
+      - name: Set image URI
+        id: image-uri
+        run: |
+          if [ -n "${{ steps.build-image.outputs.digest }}" ]; then
+            echo "uri=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}@${{ steps.build-image.outputs.digest }}" >> $GITHUB_OUTPUT
+          else
+            echo "uri=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.ref_name }}-${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
+
+      # --- Step 7: Render New Task Definition ---
       - name: Render new task definition
         id: render-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ${{ steps.task-def.outputs.task-def }}
           container-name: ${{ env.CONTAINER_NAME }}
-          image: ${{ steps.build-image.outputs.digest != '' && format('{0}@{1}', steps.login-ecr.outputs.registry + '/' + env.ECR_REPOSITORY, steps.build-image.outputs.digest) || steps.login-ecr.outputs.registry + '/' + env.ECR_REPOSITORY + ':' + github.ref_name + '-' + github.sha }}
-
-      # --- Step 7: Deploy New Task Definition ---
-      - name: Deploy new task definition to ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+          image: ${{ steps.image-uri.outputs.uri }}
