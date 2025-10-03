@@ -87,3 +87,12 @@ jobs:
           task-definition: ${{ steps.task-def.outputs.task-def }}
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.image-uri.outputs.uri }}
+
+      # --- Step 8: Deploy New Task Definition ---
+      - name: Deploy new task definition to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
